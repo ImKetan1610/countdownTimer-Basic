@@ -17,9 +17,38 @@ function App() {
     setTime(e.target.value);
   };
 
-  const handleClick = () => {};
+  const handleClick = () => {
+    console.log(time);
+    const selectedDate = new Date(time).getTime();
+    setTargetTime(selectedDate);
+  };
 
-  const calculateTimeLeft = () => {};
+  const calculateTimeLeft = () => {
+    const difference = targetTime - new Date().getTime();
+    if (difference > 0) {
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((difference / (1000 * 60)) % 60);
+      const seconds = Math.floor((difference / 1000) % 60);
+      setCount({
+        Days: days,
+        Hours: hours,
+        Minutes: minutes,
+        Seconds: seconds,
+      });
+    } else {
+      setCount({ Days: 0, Hours: 0, Minutes: 0, Seconds: 0 });
+    }
+  };
+
+  useEffect(() => {
+    console.log("here");
+    const interval = setInterval(() => {
+      calculateTimeLeft();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [targetTime]);
 
   return (
     <>
